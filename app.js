@@ -3,6 +3,7 @@ const ctx=canvas.getContext("2d");
 const color=document.getElementsByClassName("color-button");
 const mode=document.getElementById("mode-change");
 const range=document.getElementById("range__bar");
+const save=document.getElementById("mode-save");
 
 const CANVAS_HEIGHT=500;
 const CANVAS_WIDTH=700;
@@ -14,6 +15,8 @@ let filling=false;
 canvas.width=CANVAS_WIDTH;
 canvas.height=CANVAS_HEIGHT;
 
+ctx.fillStyle="white";
+ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 ctx.lineWidth=2.5;
 ctx.strokeStyle=DEFAULT_COLOR;
 ctx.fillStyle=DEFAULT_COLOR;
@@ -67,20 +70,39 @@ function fillScreen(event){
     }
 }
 
+function preventRightClick(event){
+    event.preventDefault();
+}
+
+function saveMyImage(event){
+    //toDataURL 이용해서  이미지를 URL데이터로 변환할것.
+    const image=canvas.toDataURL("image/jpeg");
+    const link=document.createElement('a');
+    link.href=image;
+    link.download="My PaintJS[🎈]"
+    link.click();  
+}
+
 if (canvas){
     canvas.addEventListener("mouseleave",stopPainting);
     canvas.addEventListener("mousemove",handleMouseMove);
     canvas.addEventListener("mousedown",startPainting);
     canvas.addEventListener("mouseup",stopPainting);
     canvas.addEventListener("click",fillScreen);
+    canvas.addEventListener("contextmenu", preventRightClick);
 }
 
 Array.from(color).forEach(color=>color.addEventListener("click",handleChangeColor));
 
 if (mode) {
     mode.addEventListener("click", handleModeClick);
-  }
+}
 
-  if (range){
-      range.addEventListener("input",handleBrushSize);
-  }
+if (range){
+    range.addEventListener("input",handleBrushSize);
+}
+
+if (save){
+    save.addEventListener("click",saveMyImage);
+}
+
