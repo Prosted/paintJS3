@@ -1,9 +1,12 @@
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 const color=document.getElementsByClassName("color-button");
+const mode=document.getElementById("mode-change");
+const range=document.getElementById("range__bar");
 
 
 let painting=false;
+let filling=false;
 
 canvas.width=700;
 canvas.height=500;
@@ -37,6 +40,21 @@ function handleChangeColor(event){
     ctx.strokeStyle=color;
 }
 
+function handleModeClick(event){
+    if(filling==false){
+        mode.innerText="Paint";
+        filling=true;
+    }
+    else{
+        mode.innerText="Fill"
+        filling=false;
+    }
+}
+
+function handleBrushSize(event){
+    const size=event.target.value;
+    ctx.lineWidth=size;
+}
 
 if (canvas){
     canvas.addEventListener("mouseleave",stopPainting);
@@ -46,3 +64,11 @@ if (canvas){
 }
 
 Array.from(color).forEach(color=>color.addEventListener("click",handleChangeColor));
+
+if (mode) {
+    mode.addEventListener("click", handleModeClick);
+  }
+
+  if (range){
+      range.addEventListener("input",handleBrushSize);
+  }
